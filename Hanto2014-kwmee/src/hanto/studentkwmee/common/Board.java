@@ -1,17 +1,17 @@
 package hanto.studentkwmee.common;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import hanto.common.HantoCoordinate;
-import hanto.common.HantoPiece;
+import hanto.common.HantoPieceType;
 import hanto.studentkwmee.alpha.*;
 
 public class Board {
 
-	ArrayList<Piece> boardLayout;
+	HashMap<Coordinate, Piece> boardLayout = new HashMap<Coordinate, Piece>();
 	
 	public void clearBoard(){
-		boardLayout = new ArrayList<Piece>();
+		boardLayout = new HashMap<Coordinate, Piece>();
 	}
 
 	public boolean isAdjacent(HantoCoordinate to) {
@@ -41,8 +41,9 @@ public class Board {
 		return false;
 	}
 
-	public void add(Piece piece) {
-		boardLayout.add(piece);
+	public void add(HantoCoordinate to, Piece pieceType) {
+		Coordinate coord = new Coordinate(to.getX(), to.getY());
+		boardLayout.put(coord, pieceType);
 		
 	}
 
@@ -50,13 +51,40 @@ public class Board {
 		return boardLayout.size();
 	}
 
+
 	public Piece getPiece(HantoCoordinate where) {
-		for (Piece p : boardLayout){
-			if( new Coordinate(where).equals(p.getCoord())){
-				return p;
-			}
+		if(boardLayout.containsKey(new Coordinate(where.getX(), where.getY()))){
+			return boardLayout.get(where);
 		}
 		return null;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((boardLayout == null) ? 0 : boardLayout.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Board other = (Board) obj;
+		if (boardLayout == null) {
+			if (other.boardLayout != null)
+				return false;
+		} else if (!boardLayout.equals(other.boardLayout))
+			return false;
+		return true;
+	}
 	
+	
+
 }

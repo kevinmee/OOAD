@@ -10,9 +10,10 @@ import hanto.common.MoveResult;
 
 public class GammaHantoTestGame implements HantoTestGame{
 
+	private HantoPlayerColor turnColor;
 	
 	public GammaHantoTestGame(HantoPlayerColor movesFirst){
-		
+		turnColor = movesFirst;
 	}
 
 	@Override

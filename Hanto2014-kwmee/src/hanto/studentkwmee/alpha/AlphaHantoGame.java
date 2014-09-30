@@ -97,8 +97,7 @@ public class AlphaHantoGame implements HantoGame{
 
 	@Override
 	public HantoPiece getPieceAt(HantoCoordinate where) {
-		HantoPiece p =  gameBoard.getPiece(where);
-		return p;
+		return gameBoard.getPiece(where);
 	}
 
 	@Override

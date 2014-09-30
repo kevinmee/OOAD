@@ -7,6 +7,7 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.HantoTestGame;
 import hanto.common.MoveResult;
+import hanto.studentkwmee.alpha.Piece;
 
 public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 
@@ -32,18 +33,21 @@ public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 
 	@Override
 	public void initializeBoard(PieceLocationPair[] initialPieces) {
-		 super.initializeBoard(initialPieces);
+		clearGameBoard();
+		for( int i = 0; i < initialPieces.length; i++ ){
+			Piece p = new Piece(initialPieces[i].pieceType, initialPieces[i].player);
+			getGameBoard().add(initialPieces[i].location, p);
+		}
 	}
 
 	@Override
 	public void setTurnNumber(int turnNumber) {
-		super.setTurnNumber(turnNumber);
-		
+		super.turnNumber = turnNumber;
 	}
 
 	@Override
 	public void setPlayerMoving(HantoPlayerColor player) {
-		super.setPlayerTurn(player);
+		super.turnColor = player;
 		
 	}
 	

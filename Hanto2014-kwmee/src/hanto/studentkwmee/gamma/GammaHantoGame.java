@@ -6,7 +6,6 @@ import hanto.common.HantoGame;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
-import hanto.common.HantoTestGame.PieceLocationPair;
 import hanto.common.MoveResult;
 import hanto.studentkwmee.alpha.Piece;
 import hanto.studentkwmee.common.Board;
@@ -14,11 +13,11 @@ import hanto.studentkwmee.common.Board;
 public class GammaHantoGame implements HantoGame {
 
 	private Board gameBoard;
-	private HantoPlayerColor turnColor;
-	private int turnNumber, maxTurn = 20;
+	protected HantoPlayerColor turnColor;
+	protected int turnNumber, maxTurn = 20;
 	
 	public GammaHantoGame(HantoPlayerColor color){
-		gameBoard = new Board();
+		setGameBoard(new Board());
 		turnNumber = 0;
 		turnColor = color;
 	}
@@ -46,12 +45,12 @@ public class GammaHantoGame implements HantoGame {
 		}
 		
 		// Checks to see if there is a piece to attach to
-		else if( !gameBoard.isAdjacent(to)){
+		else if( !getGameBoard().isAdjacent(to)){
 			throw new HantoException( "There is no piece next to that one!");
 		}
 		
 		// Adds the piece to the board
-		gameBoard.add(to, piece);
+		getGameBoard().add(to, piece);
 				
 		// Change player turn
 		changeTurn();
@@ -63,7 +62,7 @@ public class GammaHantoGame implements HantoGame {
 	
 	private MoveResult gameResult() {
 		MoveResult result;
-		if(gameBoard.size() < 12){
+		if(getGameBoard().size() < 12){
 			result = MoveResult.OK;
 		}
 		else
@@ -83,34 +82,25 @@ public class GammaHantoGame implements HantoGame {
 
 	@Override
 	public HantoPiece getPieceAt(HantoCoordinate where) {
-		return gameBoard.getPiece(where);
+		return getGameBoard().getPiece(where);
 	}
 
 	@Override
 	public String getPrintableBoard() {
-		return gameBoard.toString();
+		return getGameBoard().toString();
 	}
 
-
-	public void setTurnNumber(int turnNum) {
-		turnNumber = turnNum;
-		
+	public Board getGameBoard() {
+		return gameBoard;
 	}
 
-
-	public void setPlayerTurn(HantoPlayerColor player) {
-		turnColor = player;
-		
+	public void setGameBoard(Board gameBoard) {
+		this.gameBoard = gameBoard;
 	}
 
-
-	public void initializeBoard(PieceLocationPair[] initialPieces) {
-		for( int i = 0; i < initialPieces.length; i++ ){
-			Piece p = new Piece(initialPieces[i].pieceType, initialPieces[i].player);
-			gameBoard.add(initialPieces[i].location, p);
-		}
+	public void clearGameBoard(){
+		gameBoard.clearBoard();
 	}
-
 
 
 }

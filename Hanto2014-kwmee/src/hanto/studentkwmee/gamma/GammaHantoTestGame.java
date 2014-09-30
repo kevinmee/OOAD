@@ -8,48 +8,42 @@ import hanto.common.HantoPlayerColor;
 import hanto.common.HantoTestGame;
 import hanto.common.MoveResult;
 
-public class GammaHantoTestGame implements HantoTestGame{
+public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 
-	private HantoPlayerColor turnColor;
-	
 	public GammaHantoTestGame(HantoPlayerColor movesFirst){
-		turnColor = movesFirst;
+		super(movesFirst); 
 	}
 
 	@Override
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
-		// TODO Auto-generated method stub
-		return null;
+		return super.makeMove(pieceType, from, to);
 	}
 
 	@Override
 	public HantoPiece getPieceAt(HantoCoordinate where) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getPieceAt(where);
 	}
 
 	@Override
 	public String getPrintableBoard() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getPrintableBoard();
 	}
 
 	@Override
 	public void initializeBoard(PieceLocationPair[] initialPieces) {
-		// TODO Auto-generated method stub
-		
+		 super.initializeBoard(initialPieces);
 	}
 
 	@Override
 	public void setTurnNumber(int turnNumber) {
-		// TODO Auto-generated method stub
+		super.setTurnNumber(turnNumber);
 		
 	}
 
 	@Override
 	public void setPlayerMoving(HantoPlayerColor player) {
-		// TODO Auto-generated method stub
+		super.setPlayerTurn(player);
 		
 	}
 	

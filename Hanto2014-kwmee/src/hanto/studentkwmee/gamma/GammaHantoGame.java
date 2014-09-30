@@ -6,6 +6,7 @@ import hanto.common.HantoGame;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
+import hanto.common.HantoTestGame.PieceLocationPair;
 import hanto.common.MoveResult;
 import hanto.studentkwmee.alpha.Piece;
 import hanto.studentkwmee.common.Board;
@@ -14,7 +15,7 @@ public class GammaHantoGame implements HantoGame {
 
 	private Board gameBoard;
 	private HantoPlayerColor turnColor;
-	private int turnNumber;
+	private int turnNumber, maxTurn = 20;
 	
 	public GammaHantoGame(HantoPlayerColor color){
 		gameBoard = new Board();
@@ -22,11 +23,6 @@ public class GammaHantoGame implements HantoGame {
 		turnColor = color;
 	}
 	
-	public void initialize(HantoPlayerColor startingPlayer){
-		gameBoard.clearBoard();
-		turnNumber = 0;
-		turnColor = startingPlayer;
-	}
 	
 	public boolean isFirstLocation( HantoCoordinate startingLocation){
 		if ( startingLocation.getX() == 0 && startingLocation.getY() == 0){
@@ -45,6 +41,9 @@ public class GammaHantoGame implements HantoGame {
 		if( !isFirstLocation(to)){
 			throw new HantoException( "First move must play at (0,0)");
 		}
+		if( (turnNumber / 2) > maxTurn && gameResult() == MoveResult.OK){
+			return MoveResult.DRAW;
+		}
 		
 		// Checks to see if there is a piece to attach to
 		else if( !gameBoard.isAdjacent(to)){
@@ -56,6 +55,7 @@ public class GammaHantoGame implements HantoGame {
 				
 		// Change player turn
 		changeTurn();
+		turnNumber ++;
 				
 		return gameResult();
 		
@@ -90,5 +90,27 @@ public class GammaHantoGame implements HantoGame {
 	public String getPrintableBoard() {
 		return gameBoard.toString();
 	}
+
+
+	public void setTurnNumber(int turnNum) {
+		turnNumber = turnNum;
+		
+	}
+
+
+	public void setPlayerTurn(HantoPlayerColor player) {
+		turnColor = player;
+		
+	}
+
+
+	public void initializeBoard(PieceLocationPair[] initialPieces) {
+		for( int i = 0; i < initialPieces.length; i++ ){
+			Piece p = new Piece(initialPieces[i].pieceType, initialPieces[i].player);
+			gameBoard.add(initialPieces[i].location, p);
+		}
+	}
+
+
 
 }

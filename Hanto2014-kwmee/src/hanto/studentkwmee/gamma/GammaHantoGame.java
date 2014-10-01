@@ -22,7 +22,7 @@ public class GammaHantoGame implements HantoGame {
 
 	private Board gameBoard;
 	protected HantoPlayerColor turnColor;
-	protected int turnNumber, maxTurn = 20;
+	protected int turnNumber, maxTurn = 40;
 
 	/**
 	 * Constructor for GammaHantoGame.
@@ -58,24 +58,27 @@ public class GammaHantoGame implements HantoGame {
 		Piece piece = new Piece(pieceType, turnColor);
 
 		// Checks to see if the first location is (0,0)
-		if (!isFirstLocation(to)) {
+		if (turnNumber == 0 && !isFirstLocation(to)) {
 			throw new HantoException("First move must play at (0,0)");
 		}
-		if ((turnNumber / 2) > maxTurn && gameResult() == MoveResult.OK) {
+		if ((turnNumber * 2) >= maxTurn) {
 			return MoveResult.DRAW;
 		}
-
+		
 		// Checks to see if there is a piece to attach to
 		else {
 			if (!gameBoard.isAdjacent(to)) {
 				throw new HantoException("There is no piece next to that one!");
 			}
+			if( gameBoard.size() > 0){
+				gameBoard.movePiece(from, to);
+			}
 		}
-
+		
 		// Adds the piece to the board
 		gameBoard.add(to, piece);
 
-		// Change player turn
+		// Change player turn and increases the turn counter
 		changeTurn();
 		turnNumber++;
 

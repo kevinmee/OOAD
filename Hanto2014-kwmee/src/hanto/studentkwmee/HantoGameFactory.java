@@ -12,6 +12,7 @@ package hanto.studentkwmee;
 
 import hanto.studentkwmee.alpha.AlphaHantoGame;
 import hanto.studentkwmee.beta.BetaHantoGame;
+import hanto.studentkwmee.gamma.GammaHantoGame;
 import hanto.common.*;
 
 /**
@@ -66,6 +67,9 @@ public class HantoGameFactory
 			break;
 		case BETA_HANTO:
 			game = new BetaHantoGame();
+			break;
+		case GAMMA_HANTO:
+			game = new GammaHantoGame(movesFirst);
 			break;
 		}
 		return game;

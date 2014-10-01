@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import hanto.common.HantoCoordinate;
+import hanto.common.HantoException;
 import hanto.studentkwmee.alpha.*;
 
 /**
@@ -68,6 +69,22 @@ public class Board {
 		Coordinate coord = new Coordinate(to.getX(), to.getY());
 		boardLayout.put(coord, pieceType);
 		
+	}
+	
+	public void movePiece( HantoCoordinate from, HantoCoordinate to) throws HantoException{
+		if(boardLayout.containsKey(to)){
+			throw new HantoException("Can't play on top of another piece");
+		}
+		if( from == null){
+			throw new HantoException("There is no piece to move");
+		}
+		
+		final Piece oldLocation = boardLayout.get(new Coordinate(from));
+		final Piece newLocation = new Piece(oldLocation.getType(), oldLocation.getColor(), to);
+		
+		boardLayout.remove(new Coordinate(from));
+		
+		add(newLocation.getCord(), newLocation);
 	}
 
 	/**

@@ -1,3 +1,10 @@
+/*
+ * Gamma Hanto Test Game
+ * 
+ * Kevin Mee, WPI A-term 2014
+ */
+
+
 package hanto.studentkwmee.gamma;
 
 import hanto.common.HantoCoordinate;
@@ -9,15 +16,21 @@ import hanto.common.HantoTestGame;
 import hanto.common.MoveResult;
 import hanto.studentkwmee.alpha.Piece;
 
+/**
+ */
 public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 
+	/**
+	 * Constructor for GammaHantoTestGame.
+	 * @param movesFirst HantoPlayerColor
+	 */
 	public GammaHantoTestGame(HantoPlayerColor movesFirst){
 		super(movesFirst); 
 	}
 
 	@Override
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
-			HantoCoordinate to) throws HantoException {
+	HantoCoordinate to) throws HantoException {
 		return super.makeMove(pieceType, from, to);
 	}
 

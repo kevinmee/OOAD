@@ -1,16 +1,33 @@
+/*
+ * Coordinate system for Hanto
+ * 
+ * Kevin Mee, WPI A-term 2014
+ */
+
 package hanto.studentkwmee.common;
 
 import hanto.common.HantoCoordinate;
 
+/**
+ */
 public class Coordinate implements HantoCoordinate{
 
 	int xCoord, yCoord;
 	
+	/**
+	 * Constructor for Coordinate.
+	 * @param x int
+	 * @param y int
+	 */
 	public Coordinate( int x, int y){
 		xCoord = x;
 		yCoord = y;
 	}
 	
+	/**
+	 * Constructor for Coordinate.
+	 * @param hantoCoord HantoCoordinate
+	 */
 	public Coordinate( HantoCoordinate hantoCoord){
 		xCoord = hantoCoord.getX();
 		yCoord = hantoCoord.getY();

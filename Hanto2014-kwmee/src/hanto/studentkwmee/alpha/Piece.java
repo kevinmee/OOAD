@@ -1,3 +1,9 @@
+/*
+ * Piece class for Hanto Game
+ * 
+ * Kevin Mee, WPI A-term 2014
+ */
+
 package hanto.studentkwmee.alpha;
 
 import hanto.common.HantoCoordinate;
@@ -5,12 +11,20 @@ import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 
+/**
+ */
 public class Piece implements HantoPiece{
 
 	private HantoPieceType type;
 	private HantoPlayerColor color;
 	private HantoCoordinate coord;
 	
+	/**
+	 * Constructor for Piece.
+	 * @param type HantoPieceType
+	 * @param color HantoPlayerColor
+	 * @param coord HantoCoordinate
+	 */
 	public Piece(HantoPieceType type, HantoPlayerColor color, HantoCoordinate coord){
 		this.type = type;
 		this.color = color;
@@ -18,7 +32,14 @@ public class Piece implements HantoPiece{
 		
 	}
 		
-	public Piece(HantoPieceType pieceType, HantoPlayerColor turnColor) {
+	/**
+	 * Constructor for Piece.
+	
+	
+	 * @param type HantoPieceType
+	 * @param color HantoPlayerColor
+	 */
+	public Piece(HantoPieceType type, HantoPlayerColor color) {
 		this.type = type;
 		this.color = color;
 	}

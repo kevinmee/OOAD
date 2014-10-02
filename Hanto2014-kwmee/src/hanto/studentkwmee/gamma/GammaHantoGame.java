@@ -44,18 +44,19 @@ public class GammaHantoGame implements HantoGame {
 	 * @return boolean
 	 */
 	public boolean isFirstLocation(HantoCoordinate startingLocation) {
+		boolean result = false;
 		if (gameBoard.size() == 0 && startingLocation.getX() == 0
 		&& startingLocation.getY() == 0) {
-			return true;
+			result = true;
 		}
-		return false;
+		return result;
 	}
 
 	@Override
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 	HantoCoordinate to) throws HantoException {
 
-		Piece piece = new Piece(pieceType, turnColor);
+		final Piece piece = new Piece(pieceType, turnColor);
 
 		// Checks to see if the first location is (0,0)
 		if (turnNumber == 0 && !isFirstLocation(to)) {

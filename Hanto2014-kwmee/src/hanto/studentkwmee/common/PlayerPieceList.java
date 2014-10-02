@@ -16,7 +16,7 @@ import hanto.studentkwmee.alpha.Piece;
  */
 public class PlayerPieceList{
 
-	private Piece[] pieces;
+	private final Piece[] pieces;
 	private List<Piece> blueCollection;
 	private List<Piece> redCollection;
 	

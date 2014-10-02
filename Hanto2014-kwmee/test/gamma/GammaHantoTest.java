@@ -13,7 +13,7 @@ package gamma;
 import static org.junit.Assert.*;
 import hanto.common.*;
 import org.junit.*;
-import hanto.common.*;
+
 import static hanto.common.HantoPieceType.*;
 import static hanto.common.MoveResult.*;
 import static hanto.common.HantoPlayerColor.*;
@@ -33,6 +33,11 @@ public class GammaHantoTest
 	{
 		private final int x, y;
 		
+		/**
+		 * Constructor for TestHantoCoordinate.
+		 * @param x int
+		 * @param y int
+		 */
 		public TestHantoCoordinate(int x, int y)
 		{
 			this.x = x;
@@ -62,12 +67,18 @@ public class GammaHantoTest
 	private HantoGame game;
 	private HantoTestGame testGame;
 	
+	/**
+	 * Method initializeClass.
+	 */
 	@BeforeClass
 	public static void initializeClass()
 	{
 		factory = HantoTestGameFactory.getInstance();
 	}
 	
+	/**
+	 * Method setup.
+	 */
 	@Before
 	public void setup()
 	{
@@ -76,6 +87,10 @@ public class GammaHantoTest
 		game = testGame;
 	}
 	
+	/**
+	 * Method bluePlacesButterflyFirst.
+	 * @throws HantoException
+	 */
 	@Test
 	public void bluePlacesButterflyFirst() throws HantoException
 	{
@@ -86,6 +101,10 @@ public class GammaHantoTest
 		assertEquals(BUTTERFLY, piece.getType());
 	}
 	
+	/**
+	 * Method redPlacesSparrowFirst.
+	 * @throws HantoException
+	 */
 	@Test
 	public void redPlacesSparrowFirst() throws HantoException
 	{
@@ -93,6 +112,10 @@ public class GammaHantoTest
 		assertEquals(OK, mr);
 	}
 	
+	/**
+	 * Method blueMovesSparrow.
+	 * @throws HantoException
+	 */
 	@Test
 	public void blueMovesSparrow() throws HantoException
 	{
@@ -107,6 +130,10 @@ public class GammaHantoTest
 		assertEquals(SPARROW, piece.getType());
 	}
 	
+	/**
+	 * Method blueMovesSparrowUsingTestGame.
+	 * @throws HantoException
+	 */
 	@Test
 	public void blueMovesSparrowUsingTestGame() throws HantoException
 	{
@@ -125,12 +152,16 @@ public class GammaHantoTest
 		assertEquals(SPARROW, piece.getType());
 	}
 	
+	/**
+	 * Method gameEndsInDrawAfter20Moves.
+	 * @throws HantoException
+	 */
 	@Test
 	public void gameEndsInDrawAfter20Moves() throws HantoException
 	{
 		final PieceLocationPair[] board = new PieceLocationPair[] {
-			    plPair(BLUE, BUTTERFLY, 0, 0), plPair(RED, BUTTERFLY, 0, 1),
-			    plPair(BLUE, SPARROW, 0, -1), plPair(RED, SPARROW, 0, 2)
+			plPair(BLUE, BUTTERFLY, 0, 0), plPair(RED, BUTTERFLY, 0, 1),
+			plPair(BLUE, SPARROW, 0, -1), plPair(RED, SPARROW, 0, 2)
 			    
 		};
 		testGame.initializeBoard(board);
@@ -139,6 +170,10 @@ public class GammaHantoTest
 		assertEquals(DRAW, game.makeMove(SPARROW, makeCoordinate(0, 2), makeCoordinate(1, 1)));
 	}
 	
+	/**
+	 * Method moveButterfly.
+	 * @throws HantoException
+	 */
 	@Test
 	public void moveButterfly() throws HantoException
 	{
@@ -151,6 +186,10 @@ public class GammaHantoTest
 		assertNull(game.getPieceAt(makeCoordinate(0, 0)));
 	}
 	
+	/**
+	 * Method moveToDisconnectConfiguration.
+	 * @throws HantoException
+	 */
 	@Test(expected=HantoException.class)
 	public void moveToDisconnectConfiguration() throws HantoException
 	{
@@ -159,6 +198,10 @@ public class GammaHantoTest
 		game.makeMove(BUTTERFLY, makeCoordinate(0, 0), makeCoordinate(0, -1));
 	}
 	
+	/**
+	 * Method attemptToMoveAPieceFromAnEmptyHex.
+	 * @throws HantoException
+	 */
 	@Test(expected=HantoException.class)
 	public void attemptToMoveAPieceFromAnEmptyHex() throws HantoException
 	{
@@ -167,12 +210,23 @@ public class GammaHantoTest
 		game.makeMove(BUTTERFLY, makeCoordinate(1, 0), makeCoordinate(0, -1));
 	}
 	
+	/**
+	 * Method attemptToMoveWrongPiece.
+	 * @throws HantoException
+	 */
 	@Test(expected=HantoException.class)
 	public void attemptToMoveWrongPiece() throws HantoException
 	{
 		game.makeMove(BUTTERFLY, null, makeCoordinate(0, 0));
 		game.makeMove(BUTTERFLY, null, makeCoordinate(0, 1));
 		game.makeMove(SPARROW, makeCoordinate(0, 0), makeCoordinate(1, 0));
+	}
+	
+	/**
+	 * Method printBoard.
+	 */
+	public void printBoard(){
+		game.getPrintableBoard();
 	}
 	
 	// Helper methods
@@ -190,7 +244,7 @@ public class GammaHantoTest
 	 * @return
 	 */
 	private PieceLocationPair plPair(HantoPlayerColor player, HantoPieceType pieceType, 
-			int x, int y)
+	int x, int y)
 	{
 		return new PieceLocationPair(player, pieceType, new TestHantoCoordinate(x, y));
 	}

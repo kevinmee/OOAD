@@ -29,8 +29,8 @@ public class Board {
 	/**
 	 * Method isAdjacent.
 	 * @param to HantoCoordinate
-	 * @return boolean
-	 */
+	
+	 * @return boolean */
 	public boolean isAdjacent(HantoCoordinate to) {
 		boolean result = false;
 		
@@ -66,13 +66,19 @@ public class Board {
 	 * @param pieceType Piece
 	 */
 	public void add(HantoCoordinate to, Piece pieceType) {
-		Coordinate coord = new Coordinate(to.getX(), to.getY());
+		final Coordinate coord = new Coordinate(to.getX(), to.getY());
 		boardLayout.put(coord, pieceType);
 		
 	}
 	
+	/**
+	 * Method movePiece.
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
+	 * @throws HantoException
+	 */
 	public void movePiece( HantoCoordinate from, HantoCoordinate to) throws HantoException{
-		if(boardLayout.containsKey(to)){
+		if(boardLayout.containsKey(new Coordinate(to.getX(), to.getY()))){
 			throw new HantoException("Can't play on top of another piece");
 		}
 		if( from == null){
@@ -89,8 +95,8 @@ public class Board {
 
 	/**
 	 * Method size.
-	 * @return int
-	 */
+	
+	 * @return int */
 	public int size() {
 		return boardLayout.size();
 	}
@@ -99,8 +105,8 @@ public class Board {
 	/**
 	 * Method getPiece.
 	 * @param where HantoCoordinate
-	 * @return Piece
-	 */
+	
+	 * @return Piece */
 	public Piece getPiece(HantoCoordinate where) {
 		return boardLayout.get(new Coordinate(where.getX(), where.getY()));
 	}

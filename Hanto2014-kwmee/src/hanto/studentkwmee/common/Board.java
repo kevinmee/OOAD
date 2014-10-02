@@ -6,7 +6,9 @@
 
 package hanto.studentkwmee.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import hanto.common.HantoCoordinate;
@@ -18,12 +20,14 @@ import hanto.studentkwmee.alpha.*;
 public class Board {
 
 	Map<Coordinate,Piece> boardLayout = new HashMap<Coordinate, Piece>();
+	private List<Piece> board;
 	
 	/**
 	 * Method clearBoard.
 	 */
 	public void clearBoard(){
 		boardLayout = new HashMap<Coordinate, Piece>();
+		board = new ArrayList<Piece>();
 	}
 
 	/**
@@ -59,6 +63,9 @@ public class Board {
 		}
 		return result;
 	}
+	
+
+
 
 	/**
 	 * Method add.
@@ -81,7 +88,7 @@ public class Board {
 		if(boardLayout.containsKey(new Coordinate(to.getX(), to.getY()))){
 			throw new HantoException("Can't play on top of another piece");
 		}
-		if( from == null){
+		if( !boardLayout.containsKey(new Coordinate(from.getX(), from.getY()))){
 			throw new HantoException("There is no piece to move");
 		}
 		
@@ -90,7 +97,7 @@ public class Board {
 		
 		boardLayout.remove(new Coordinate(from));
 		
-		add(newLocation.getCord(), newLocation);
+		add(newLocation.getCoord(), newLocation);
 	}
 
 	/**

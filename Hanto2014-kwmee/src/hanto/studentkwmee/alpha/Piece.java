@@ -52,9 +52,11 @@ public class Piece implements HantoPiece{
 		return color;
 	}
 
-	public HantoCoordinate getCord() {
+	public HantoCoordinate getCoord() {
 		return coord;
 	}
+
+
 	
 
 	

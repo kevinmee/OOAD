@@ -65,17 +65,18 @@ public class GammaHantoGame implements HantoGame {
 		if ((turnNumber * 2) >= maxTurn) {
 			return MoveResult.DRAW;
 		}
-		
+
 		// Checks to see if there is a piece to attach to
 		else {
 			if (!gameBoard.isAdjacent(to)) {
 				throw new HantoException("There is no piece next to that one!");
-			}
-			if( gameBoard.size() > 0){
-				gameBoard.movePiece(from, to);
+			} else {
+				if (from != null) {
+					gameBoard.movePiece(from, to);
+				} 
 			}
 		}
-		
+
 		// Adds the piece to the board
 		gameBoard.add(to, piece);
 

@@ -40,7 +40,7 @@ public interface HantoGame
 	 *             the piece is not the color of the player who is moving.
 	 */
 	MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
-			HantoCoordinate to) throws HantoException;
+	HantoCoordinate to) throws HantoException;
 	
 	/**
 	 * @param where the coordinate to query

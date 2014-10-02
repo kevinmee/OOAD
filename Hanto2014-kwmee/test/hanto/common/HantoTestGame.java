@@ -33,7 +33,7 @@ public interface HantoTestGame extends HantoGame
 		 * @param location the coordinate where the piece is at the beginning of the test
 		 */
 		public PieceLocationPair(HantoPlayerColor player, HantoPieceType pieceType,
-				HantoCoordinate location)
+		HantoCoordinate location)
 		{
 			this.player = player;
 			this.pieceType = pieceType;

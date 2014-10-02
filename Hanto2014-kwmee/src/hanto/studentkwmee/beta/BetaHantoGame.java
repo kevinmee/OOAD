@@ -18,7 +18,7 @@ public class BetaHantoGame implements HantoGame{
 
 	@Override
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
-	HantoCoordinate to) throws HantoException {
+	HantoCoordinate to) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -50,7 +50,7 @@ public class AlphaHantoGame implements HantoGame {
 	 *            HantoCoordinate
 	 * @return boolean
 	 */
-	public boolean isFirstLocation(HantoCoordinate startingLocation) {
+	public static boolean isFirstLocation(HantoCoordinate startingLocation) {
 		boolean location = false;
 		if (startingLocation.getX() == 0 && startingLocation.getY() == 0) {
 			location = true;
@@ -65,7 +65,7 @@ public class AlphaHantoGame implements HantoGame {
 	 *            HantoPlayerColor
 	 * @return boolean
 	 */
-	public boolean isBlue(HantoPlayerColor color) {
+	public static boolean isBlue(HantoPlayerColor color) {
 		boolean correctColor = false;
 		if (color == HantoPlayerColor.BLUE) {
 			correctColor = true;
@@ -96,7 +96,6 @@ public class AlphaHantoGame implements HantoGame {
 		// Checks to see if there is a piece to attach to
 		else {
 			if (!gameBoard.isAdjacent(to)) {
-
 				throw new HantoException("There is no piece next to that one!");
 			}
 		}

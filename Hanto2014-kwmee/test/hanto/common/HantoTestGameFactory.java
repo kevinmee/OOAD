@@ -10,9 +10,9 @@
 
 package hanto.common;
 
-import hanto.studentkwmee.HantoGameFactory;
-import hanto.studentkwmee.alpha.AlphaHantoGame;
-import hanto.studentkwmee.beta.BetaHantoGame;
+
+
+
 import hanto.studentkwmee.gamma.GammaHantoTestGame;
 
 /**

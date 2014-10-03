@@ -106,11 +106,32 @@ public class MyDeltaTest {
 	 */
 	@Test
 	public void tryWalking() throws HantoException{
+		game.makeMove(BUTTERFLY, null, new Coordinate(0, 0));
+		final MoveResult mr = game.makeMove(BUTTERFLY, new Coordinate(0, 0), new Coordinate(0, 1));
+		assertEquals(MoveResult.OK, mr);
+	}
+	
+	/**
+	 * Method tryWalking.
+	 * @throws HantoException
+	 */
+	@Test
+	public void tryWalking2() throws HantoException{
+		game.makeMove(HantoPieceType.CRAB, null, new Coordinate(0, 0));
+		final MoveResult mr = game.makeMove(HantoPieceType.CRAB, new Coordinate(0, 0), new Coordinate(0, 1));
+		assertEquals(MoveResult.OK, mr);
+	}
+	
+	/**
+	 * Method tryFlying.
+	 * @throws HantoException
+	 */
+	@Test
+	public void tryFlying() throws HantoException{
 		game.makeMove(SPARROW, null, new Coordinate(0, 0));
 		final MoveResult mr = game.makeMove(SPARROW, new Coordinate(0, 0), new Coordinate(0, 1));
 		assertEquals(MoveResult.OK, mr);
 	}
-	
 	
 	/**
 	 * Method printThatBoard.

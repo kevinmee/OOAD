@@ -66,6 +66,26 @@ public class Board {
 	
 
 
+	/**
+	 * Method getNeighbors.
+	 * @param from HantoCoordinate
+	 * @return List<Coordinate>
+	 */
+	public List<Coordinate> getNeighbors(HantoCoordinate from){
+		List<Coordinate> list = new ArrayList<Coordinate>();
+		
+		list.add(new Coordinate(from.getX(), from.getY() + 1));
+		list.add(new Coordinate(from.getX(), from.getY() - 1));
+		list.add(new Coordinate(from.getX() + 1, from.getY()));
+		list.add(new Coordinate(from.getX() - 1, from.getY()));
+		list.add(new Coordinate(from.getX() - 1, from.getY() + 1));
+		list.add(new Coordinate(from.getX() + 1, from.getY() - 1));
+		
+		
+		return list;
+	}
+	
+
 
 	/**
 	 * Method add.
@@ -82,8 +102,8 @@ public class Board {
 	 * Method movePiece.
 	 * @param from HantoCoordinate
 	 * @param to HantoCoordinate
-	 * @throws HantoException
-	 */
+	
+	 * @throws HantoException */
 	public void movePiece( HantoCoordinate from, HantoCoordinate to) throws HantoException{
 		if(boardLayout.containsKey(new Coordinate(to.getX(), to.getY()))){
 			throw new HantoException("Can't play on top of another piece");

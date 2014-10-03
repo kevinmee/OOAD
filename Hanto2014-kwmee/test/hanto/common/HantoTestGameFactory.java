@@ -13,6 +13,7 @@ package hanto.common;
 
 
 
+import hanto.studentkwmee.delta.DeltaHantoTestGame;
 import hanto.studentkwmee.gamma.GammaHantoTestGame;
 
 /**
@@ -62,6 +63,8 @@ public class HantoTestGameFactory
 			case GAMMA_HANTO:
 				game = new GammaHantoTestGame(movesFirst);
 				break;
+			case DELTA_HANTO:
+				game = new DeltaHantoTestGame(movesFirst);
 		}
 		return game;
 	}

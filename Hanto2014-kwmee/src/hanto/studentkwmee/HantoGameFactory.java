@@ -12,6 +12,7 @@ package hanto.studentkwmee;
 
 import hanto.studentkwmee.alpha.AlphaHantoGame;
 import hanto.studentkwmee.beta.BetaHantoGame;
+import hanto.studentkwmee.epsilon.EpsilonHantoGame;
 import hanto.studentkwmee.gamma.GammaHantoGame;
 import hanto.common.*;
 
@@ -71,6 +72,8 @@ public class HantoGameFactory
 		case GAMMA_HANTO:
 			game = new GammaHantoGame(movesFirst);
 			break;
+		case EPSILON_HANTO:
+			game = new EpsilonHantoGame(movesFirst);
 		}
 		return game;
 	}

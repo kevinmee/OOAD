@@ -10,7 +10,6 @@ package hanto.studentkwmee.common;
 import java.util.List;
 
 import hanto.common.HantoPlayerColor;
-import hanto.studentkwmee.alpha.Piece;
 
 /**
  */

@@ -13,8 +13,8 @@ import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
-import hanto.studentkwmee.alpha.Piece;
 import hanto.studentkwmee.common.Board;
+import hanto.studentkwmee.common.Piece;
 
 /**
  */

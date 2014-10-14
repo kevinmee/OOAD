@@ -4,7 +4,7 @@
  * Kevin Mee, WPI A-term 2014
  */
 
-package hanto.studentkwmee.alpha;
+package hanto.studentkwmee.common;
 
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoPiece;

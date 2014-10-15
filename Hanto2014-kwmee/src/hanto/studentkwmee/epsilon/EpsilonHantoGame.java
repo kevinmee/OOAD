@@ -14,7 +14,6 @@ import hanto.common.HantoPlayerColor;
 import hanto.common.HantoPrematureResignationException;
 import hanto.common.MoveResult;
 import hanto.studentkwmee.common.AbstractGame;
-import hanto.studentkwmee.common.Board;
 import hanto.studentkwmee.common.Coordinate;
 import hanto.studentkwmee.common.Piece;
 import hanto.studentkwmee.common.PlayerPieceList;
@@ -35,10 +34,13 @@ public class EpsilonHantoGame extends AbstractGame {
 			throw new HantoException("Game not playing");
 		} else {
 			if ((pieceType != HantoPieceType.BUTTERFLY)
-					&& (turn >= 6)
-					&& (!board.containsValue(pieceFactory.makeHantoPiece(
-							HantoPieceType.BUTTERFLY, currentPlayer)))) {
-				throw new HantoException( "Player must place a butterfly by the fourth turn");
+					&& (turn >= 6)) {
+				if(currentPlayer == HantoPlayerColor.BLUE && super.blueButterfly == null){
+						throw new HantoException( "Player must place a butterfly by the fourth turn");
+				}
+				else if(currentPlayer == HantoPlayerColor.RED && super.redButterfly == null){
+					throw new HantoException("Need to play a butterfly");
+				}
 			}
 			switch (pieceType) {
 			case CRAB:

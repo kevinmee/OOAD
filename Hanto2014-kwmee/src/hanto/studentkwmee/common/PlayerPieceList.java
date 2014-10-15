@@ -57,25 +57,25 @@ public class PlayerPieceList {
 	public void usePiece(HantoPlayerColor playerColor, HantoPieceType pieceType) {
 		switch (pieceType) {
 		case BUTTERFLY:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
+			if (playerColor == HantoPlayerColor.BLUE)
 				numButterfliesBlue--;
 			else
 				numButterfliesRed--;
 			break;
 		case CRAB:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
+			if (playerColor == HantoPlayerColor.BLUE)
 				numCrabsBlue--;
 			else
 				numCrabsRed--;
 			break;
 		case HORSE:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
+			if (playerColor == HantoPlayerColor.BLUE)
 				numHorsesBlue--;
 			else
 				numHorsesRed--;
 			break;
 		case SPARROW:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
+			if (playerColor == HantoPlayerColor.BLUE)
 				numSparrowsBlue--;
 			else
 				numSparrowsRed--;

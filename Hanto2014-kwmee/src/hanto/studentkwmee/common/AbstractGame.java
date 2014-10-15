@@ -15,6 +15,7 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.HantoPrematureResignationException;
 import hanto.common.MoveResult;
+import hanto.studentkwmee.common.PlayerPieceList;
 
 public abstract class AbstractGame implements HantoGame {
 
@@ -178,6 +179,7 @@ public abstract class AbstractGame implements HantoGame {
 		if (from != null) {
 			board.remove(new Coordinate(from));
 		}
+		pieceList.usePiece(currentPlayer, pieceType);
 	}
 
 	/**

@@ -126,5 +126,8 @@ public class Coordinate implements HantoCoordinate {
 		coordinates.add(new Coordinate(x - 1, y));
 		coordinates.add(new Coordinate(x - 1, y + 1));
 		return coordinates;
+		
+		
+		
 	}
 }

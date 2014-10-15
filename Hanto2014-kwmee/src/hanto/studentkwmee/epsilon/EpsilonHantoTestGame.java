@@ -36,13 +36,13 @@ public class EpsilonHantoTestGame extends EpsilonHantoGame implements
 			default:
 				break;
 			}
-			board.put(new Coordinate(p.location), toPlace);
+			super.board.put(new Coordinate(p.location), toPlace);
 		}
 	}
 
 	@Override
 	public void setTurnNumber(int turnNumber) {
-		turn = (turnNumber - 1) * 2;
+		super.turn = (turnNumber - 1) * 2;
 	}
 
 	@Override

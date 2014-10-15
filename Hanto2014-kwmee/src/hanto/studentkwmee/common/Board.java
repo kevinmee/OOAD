@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoException;
@@ -18,10 +20,19 @@ import hanto.studentkwmee.alpha.*;
 /**
  */
 public class Board {
-
+	
 	Map<Coordinate,Piece> boardLayout = new HashMap<Coordinate, Piece>();
 	private List<Piece> board;
 	
+	public Board(){
+		
+	}
+	
+	public Board(Board tempBoard) {
+		Map< Coordinate, Piece>tempHash = new HashMap<Coordinate, Piece>(boardLayout);
+	}
+	
+
 	/**
 	 * Method clearBoard.
 	 */
@@ -137,6 +148,16 @@ public class Board {
 	public Piece getPiece(HantoCoordinate where) {
 		return boardLayout.get(new Coordinate(where.getX(), where.getY()));
 	}
+
+	public Set<Entry<Coordinate, Piece>> entrySet() {
+		return boardLayout.entrySet();
+	}
+
+	public void remove(Coordinate coordinate) {
+		boardLayout.remove(coordinate);
+		
+	}
+
 
 
 }

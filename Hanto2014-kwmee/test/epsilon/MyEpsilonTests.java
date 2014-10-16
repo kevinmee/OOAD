@@ -265,6 +265,55 @@ public class MyEpsilonTests {
 		new Coordinate(1, -1), new Coordinate(-1, 1)));
 
 	}
+	
+	/**
+	 * Method availableMoves
+	 * @throws HantoException
+	 */
+	@Test
+	public void availableMoves() throws HantoException {
+		
+		EpsilonHantoGame ep = new EpsilonHantoGame(HantoPlayerColor.BLUE);
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.CRAB, null, new Coordinate(0, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(1, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.BUTTERFLY, null, new Coordinate(-1, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.SPARROW, null, new Coordinate(2, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(-2, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.BUTTERFLY, null, new Coordinate(3, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.SPARROW, null, new Coordinate(-3, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.SPARROW, null, new Coordinate(4, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(-4, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.CRAB, null, new Coordinate(5, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.SPARROW, null, new Coordinate(-5, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(6, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.CRAB, null, new Coordinate(-6, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(7, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(-7, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(HantoPieceType.CRAB, null, new Coordinate(8, 0));
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+		ep.makeMove(HantoPieceType.HORSE, null, new Coordinate(-8, 0));
+		ep.getAvailableMoves(HantoPlayerColor.BLUE);
+		ep.makeMove(null, null, null);
+		ep.getAvailableMoves(HantoPlayerColor.RED);
+	}
+	
 
 	/**
 	 * Method invalidJump.

@@ -277,7 +277,7 @@ public class EpsilonHantoGame extends AbstractGame {
 													getPieceAt(hc).getType(),
 													hc, adjacent));
 										} catch (HantoException e) {
-											System.out.print("caught an error");
+											System.out.print("");
 										}
 									}
 								}

@@ -15,10 +15,13 @@ import hanto.common.HantoGame;
 import hanto.common.HantoGameID;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
+import hanto.common.HantoPlayerColor;
 import hanto.common.HantoTestGame;
 import hanto.common.HantoTestGameFactory;
 import hanto.common.MoveResult;
+import hanto.studentkwmee.common.Board;
 import hanto.studentkwmee.common.Coordinate;
+import hanto.studentkwmee.common.Piece;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -59,13 +62,11 @@ public class MyDeltaTest {
 	
 	 * @throws HantoException */
 	@Test
-	public void bluePlacesButterflyFirst() throws HantoException
+	public void board() throws HantoException
 	{
-		final MoveResult mr = game.makeMove(BUTTERFLY, null, new Coordinate(0, 0));
-		assertEquals(OK, mr);
-		final HantoPiece piece = game.getPieceAt(new Coordinate(0, 0));
-		assertEquals(BLUE, piece.getColor());
-		assertEquals(BUTTERFLY, piece.getType());
+		Board board = new Board();
+		board.add(new Coordinate(0, 0), new Piece(HantoPieceType.BUTTERFLY, HantoPlayerColor.BLUE));
+		assertEquals(null, board.getPiece(new Coordinate(0, 0)));
 	}
 	
 	/**

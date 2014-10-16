@@ -9,18 +9,11 @@ package hanto.studentkwmee.common;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 
+
 /**
- * @author tcarmstrong klbrann
  */
 public class PlayerPieceList {
-	private int numButterfliesBlue;
-	private int numCrabsBlue;
-	private int numHorsesBlue;
-	private int numSparrowsBlue;
-	private int numButterfliesRed;
-	private int numCrabsRed;
-	private int numHorsesRed;
-	private int numSparrowsRed;
+	private int blueButterfly, blueCrabs, blueHorses, blueSparrows, redButterfly, redCrabs, redHorses, redSparrows;
 
 	/**
 	 * Creates a HantoPieceInventory which stores the number of each of type of
@@ -37,109 +30,131 @@ public class PlayerPieceList {
 	 */
 	public PlayerPieceList(int butterflies, int crabs, int horses,
 			int sparrows) {
-		numButterfliesBlue = butterflies;
-		numCrabsBlue = crabs;
-		numHorsesBlue = horses;
-		numSparrowsBlue = sparrows;
-		numButterfliesRed = butterflies;
-		numCrabsRed = crabs;
-		numHorsesRed = horses;
-		numSparrowsRed = sparrows;
+		blueButterfly = butterflies;
+		blueCrabs = crabs;
+		blueHorses = horses;
+		blueSparrows = sparrows;
+		redButterfly = butterflies;
+		redCrabs = crabs;
+		redHorses = horses;
+		redSparrows = sparrows;
+	}
+
+
+	/**
+	 * Method usePiece.
+	 * @param playerColor HantoPlayerColor
+	 * @param pieceType HantoPieceType
+	 */
+	public void usePiece(HantoPlayerColor playerColor, HantoPieceType pieceType) {
+		
+		switch(playerColor){
+		case BLUE:
+			switch(pieceType){
+			case BUTTERFLY:
+				blueButterfly--;
+				break;
+			case CRAB:
+				blueCrabs--;
+				break;
+			case HORSE:
+				blueHorses--;
+				break;
+			case SPARROW:
+				blueSparrows--;
+				break;
+			default:
+				break;
+			}
+			break;
+		case RED:
+			switch(pieceType){
+			case BUTTERFLY:
+				redButterfly--;
+				break;
+			case CRAB:
+				redCrabs--;
+				break;
+			case HORSE:
+				redHorses--;
+				break;
+			case SPARROW:
+				redSparrows--;
+				break;
+			default:
+				break;
+			}
+			break;
+		}
+		
 	}
 
 	/**
-	 * Removes one of the given player's piece's of the given piece type from
-	 * the inventory.
-	 * 
-	 * @param pieceType
-	 *            - type of piece player is using
+	 * Method isEmpty.
+	 * @param playerColor HantoPlayerColor
+	 * @return boolean
 	 */
-	public void usePiece(HantoPlayerColor playerColor, HantoPieceType pieceType) {
-		switch (pieceType) {
-		case BUTTERFLY:
-			if (playerColor == HantoPlayerColor.BLUE)
-				numButterfliesBlue--;
-			else
-				numButterfliesRed--;
+	public boolean isEmpty(HantoPlayerColor playerColor) {
+		boolean isEmpty = false;
+		switch (playerColor) {
+		case RED:
+			isEmpty = (redButterfly == 0) && (redCrabs == 0)
+					&& (redHorses == 0) && (redSparrows == 0);
 			break;
-		case CRAB:
-			if (playerColor == HantoPlayerColor.BLUE)
-				numCrabsBlue--;
-			else
-				numCrabsRed--;
-			break;
-		case HORSE:
-			if (playerColor == HantoPlayerColor.BLUE)
-				numHorsesBlue--;
-			else
-				numHorsesRed--;
-			break;
-		case SPARROW:
-			if (playerColor == HantoPlayerColor.BLUE)
-				numSparrowsBlue--;
-			else
-				numSparrowsRed--;
+		case BLUE:
+			isEmpty = (blueButterfly == 0) && (blueCrabs == 0)
+					&& (blueHorses == 0) && (blueSparrows == 0);
 		default:
 			break;
 		}
+		return isEmpty;
 	}
 
 	/**
-	 * Determines if the given player has the given piece type available to him
-	 * or her to be used.
-	 * 
-	 * @param playerColor
-	 *            - color of Player whose inventory to check
-	 * @param pieceType
-	 *            - type of piece to check in inventory
-	 * @return true if a piece of the given type is available
+	 * Method hasPiece.
+	 * @param playerColor HantoPlayerColor
+	 * @param pieceType HantoPieceType
+	 * @return boolean
 	 */
 	public boolean hasPiece(HantoPlayerColor playerColor,
 			HantoPieceType pieceType) {
 		boolean hasPiece = false;
 		switch (pieceType) {
 		case BUTTERFLY:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
-				hasPiece = numButterfliesBlue > 0;
-			else
-				hasPiece = numButterfliesRed > 0;
+			if (playerColor == HantoPlayerColor.BLUE){
+				hasPiece = blueButterfly > 0;
+			}
+			else{
+				hasPiece = redButterfly > 0;
+			}
 			break;
 		case CRAB:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
-				hasPiece = numCrabsBlue > 0;
-			else
-				hasPiece = numCrabsRed > 0;
+			if (playerColor == HantoPlayerColor.BLUE){
+				hasPiece = blueCrabs > 0;
+			}
+			else{
+				hasPiece = redCrabs > 0;
+			}
 			break;
 		case HORSE:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
-				hasPiece = numHorsesBlue > 0;
-			else
-				hasPiece = numHorsesRed > 0;
+			if (playerColor == HantoPlayerColor.BLUE){
+				hasPiece = blueHorses > 0;
+			}
+			else{
+				hasPiece = redHorses > 0;
+			}
 			break;
 		case SPARROW:
-			if (playerColor.equals(HantoPlayerColor.BLUE))
-				hasPiece = numSparrowsBlue > 0;
-			else
-				hasPiece = numSparrowsRed > 0;
+			if (playerColor == HantoPlayerColor.BLUE){
+				hasPiece = blueSparrows > 0;
+			}
+			else{
+				hasPiece = redSparrows > 0;
+			}
 		default:
 			break;
 		}
 		return hasPiece;
 	}
 
-	public boolean isEmpty(HantoPlayerColor playerColor) {
-		boolean isEmpty = false;
-		switch (playerColor) {
-		case RED:
-			isEmpty = (numButterfliesRed == 0) && (numCrabsRed == 0)
-					&& (numHorsesRed == 0) && (numSparrowsRed == 0);
-			break;
-		case BLUE:
-			isEmpty = (numButterfliesBlue == 0) && (numCrabsBlue == 0)
-					&& (numHorsesBlue == 0) && (numSparrowsBlue == 0);
-		default:
-			break;
-		}
-		return isEmpty;
-	}
 }

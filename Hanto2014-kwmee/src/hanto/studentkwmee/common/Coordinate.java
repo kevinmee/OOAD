@@ -11,54 +11,54 @@ import java.util.Collection;
 import hanto.common.*;
 
 
+/**
+ */
 public class Coordinate implements HantoCoordinate {
-	int x, y;
+	int xCoord, yCoord;
 
 	/**
-	 * Constructor for the implementation of HantoCoordinate
-	 *
-	 * @param x
-	 *            The x value of the coordinate (using hex style)
-	 * @param y
-	 *            the y value of the coordinate (using hex style)
+	 * Constructor for Coordinate.
+	 * @param x int
+	 * @param y int
 	 */
 	public Coordinate(int x, int y) {
-		this.x = x;
-		this.y = y;
+		xCoord = x;
+		yCoord = y;
 	}
 
+
 	/**
-	 * Copy constructor
-	 *
-	 * @param c
+	 * Constructor for Coordinate.
+	 * @param coord HantoCoordinate
 	 */
-	public Coordinate(HantoCoordinate c) {
-		x = c.getX();
-		y = c.getY();
+	public Coordinate(HantoCoordinate coord) {
+		xCoord = coord.getX();
+		yCoord = coord.getY();
 	}
 
 	@Override
 	public int getX() {
-		return x;
+		return xCoord;
 	}
 
 	@Override
 	public int getY() {
-		return y;
+		return yCoord;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + x + "," + y + ")";
+		return "(" + xCoord + "," + yCoord + ")";
 	}
 
+
 	/**
-	 * @param c
-	 *            the HantoCoordinate determine if equal
-	 * @return true if the given coordinates match this coordinates
-	 */
-	public boolean equals(HantoCoordinate c) {
-		return (x == c.getX()) && (y == c.getY());
+	 * Method equals.
+	 * @param coord HantoCoordinate
+	
+	 * @return boolean */
+	public boolean equals(HantoCoordinate coord) {
+		return (xCoord == coord.getX()) && (yCoord == coord.getY());
 	}
 
 	@Override
@@ -70,32 +70,30 @@ public class Coordinate implements HantoCoordinate {
 		return equals;
 	}
 
-	/**
-	 * Determines if the given coordinate is adjacent to this coordinate
-	 *
-	 * @param c
-	 *            the given coordinate
-	 * @return true if the given coordinate is adjacent to this coordinate
-	 */
-	public boolean isAdjacentTo(HantoCoordinate c) {
-		return getDistanceTo(c) == 1;
-	}
 
 	/**
-	 *
-	 * @param to
-	 *            The Coordinate where we are calculating the distance to
-	 * @return The number of tiles the two tiles are away from each other. If
-	 *         they are adjacent, then it should return 1.
-	 */
+	 * Method isAdjacentTo.
+	 * @param coord HantoCoordinate
+	
+	 * @return boolean */
+	public boolean isAdjacentTo(HantoCoordinate coord) {
+		return getDistanceTo(coord) == 1;
+	}
+
+
+	/**
+	 * Method getDistanceTo.
+	 * @param to HantoCoordinate
+	
+	 * @return int */
 	public int getDistanceTo(HantoCoordinate to) {
-		int dx = to.getX() - x;
-		int dy = to.getY() - y;
+		int distanceX = to.getX() - xCoord;
+		int distanceY = to.getY() - yCoord;
 		int distance;
-		if (sameSign(dx, dy)) {
-			distance = Math.abs(dx + dy);
+		if (sameSign(distanceX, distanceY)) {
+			distance = Math.abs(distanceX + distanceY);
 		} else {
-			distance = Math.max(Math.abs(dx), Math.abs(dy));
+			distance = Math.max(Math.abs(distanceX), Math.abs(distanceY));
 		}
 		return distance;
 	}
@@ -108,26 +106,26 @@ public class Coordinate implements HantoCoordinate {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (x ^ (x >>> 32));
-		result = prime * result + (y ^ (y >>> 32));
+		result = prime * result + (xCoord ^ (xCoord >>> 32));
+		result = prime * result + (yCoord ^ (yCoord >>> 32));
 		return result;
 	}
 
-	/**
-	 * @return A collection of coordinates adjacent to this coordinate
-	 */
-	public Collection<HantoCoordinate> getAdjacentCoordinates() {
-		Collection<HantoCoordinate> coordinates = new ArrayList<HantoCoordinate>(
+/**
+ * 
+ * @return neighbors
+ */
+	public Collection<HantoCoordinate> getNeighbors() {
+		Collection<HantoCoordinate> neighbors = new ArrayList<HantoCoordinate>(
 				6);
-		coordinates.add(new Coordinate(x, y + 1));
-		coordinates.add(new Coordinate(x + 1, y));
-		coordinates.add(new Coordinate(x + 1, y - 1));
-		coordinates.add(new Coordinate(x, y - 1));
-		coordinates.add(new Coordinate(x - 1, y));
-		coordinates.add(new Coordinate(x - 1, y + 1));
-		return coordinates;
+		neighbors.add(new Coordinate(xCoord, yCoord + 1));
+		neighbors.add(new Coordinate(xCoord + 1, yCoord));
+		neighbors.add(new Coordinate(xCoord + 1, yCoord - 1));
+		neighbors.add(new Coordinate(xCoord, yCoord - 1));
+		neighbors.add(new Coordinate(xCoord - 1, yCoord));
+		neighbors.add(new Coordinate(xCoord - 1, yCoord + 1));
 		
-		
+		return neighbors;
 		
 	}
 }

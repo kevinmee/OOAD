@@ -19,6 +19,7 @@ public class Piece implements HantoPiece{
 	private HantoPlayerColor color;
 	private HantoCoordinate coord;
 	
+
 	/**
 	 * Constructor for Piece.
 	 * @param type HantoPieceType
@@ -32,10 +33,9 @@ public class Piece implements HantoPiece{
 		
 	}
 		
+
 	/**
 	 * Constructor for Piece.
-	
-	
 	 * @param type HantoPieceType
 	 * @param color HantoPlayerColor
 	 */
@@ -55,10 +55,4 @@ public class Piece implements HantoPiece{
 	public HantoCoordinate getCoord() {
 		return coord;
 	}
-
-
-	
-
-	
-	
 }

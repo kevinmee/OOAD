@@ -25,7 +25,7 @@ import hanto.common.*;
  */
 public class HantoGameFactory
 {
-	private static final HantoGameFactory instance = new HantoGameFactory();
+	private static final HantoGameFactory instance = new HantoGameFactory(); // $codepro.audit.disable constantNamingConvention
 	
 	/**
 	 * Default private descriptor.

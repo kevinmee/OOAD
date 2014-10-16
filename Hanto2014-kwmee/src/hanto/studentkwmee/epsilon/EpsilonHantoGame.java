@@ -1,3 +1,9 @@
+/*
+ * Epsilon Hanto Game
+ * 
+ * Kevin Mee, WPI A-term
+ */
+
 package hanto.studentkwmee.epsilon;
 
 import java.util.ArrayList;
@@ -8,7 +14,6 @@ import java.util.Map.Entry;
 
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.HantoPrematureResignationException;
@@ -19,7 +24,16 @@ import hanto.studentkwmee.common.Piece;
 import hanto.studentkwmee.common.PlayerPieceList;
 import hanto.tournament.HantoMoveRecord;
 
+/*
+ * 
+ */
+/**
+ */
 public class EpsilonHantoGame extends AbstractGame {
+	/**
+	 * Constructor for EpsilonHantoGame.
+	 * @param color HantoPlayerColor
+	 */
 	public EpsilonHantoGame(HantoPlayerColor color) {
 		super(color);
 		flightDistance = 4;
@@ -28,17 +42,17 @@ public class EpsilonHantoGame extends AbstractGame {
 	}
 
 	@Override
-	protected void validateMove(HantoPieceType pieceType, HantoCoordinate from,
+	protected void checkMoveStatus(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
-		if (!gameInProgress) {
+		if (!inProgress) {
 			throw new HantoException("Game not playing");
 		} else {
 			if ((pieceType != HantoPieceType.BUTTERFLY)
 					&& (turn >= 6)) {
-				if(currentPlayer == HantoPlayerColor.BLUE && super.blueButterfly == null){
+				if(current == HantoPlayerColor.BLUE && super.blueButterfly == null){
 						throw new HantoException( "Player must place a butterfly by the fourth turn");
 				}
-				else if(currentPlayer == HantoPlayerColor.RED && super.redButterfly == null){
+				else if(current == HantoPlayerColor.RED && super.redButterfly == null){
 					throw new HantoException("Need to play a butterfly");
 				}
 			}
@@ -64,27 +78,26 @@ public class EpsilonHantoGame extends AbstractGame {
 			default:
 				throw new HantoException("Can only use Butterflies, Sparrows, Crabs, and Horses.");
 			}
-			;
 		}
 	}
 
 	private void validatePiecePlacement(HantoPieceType pieceType,
 			HantoCoordinate to) throws HantoException,
 			HantoException {
-		if (!pieceList.hasPiece(currentPlayer, pieceType)) {
+		if (!pieceList.hasPiece(current, pieceType)) {
 			throw new HantoException("Inventory is empty of this piece type.");
 		}
 		if (board.isEmpty()) {
-			if (!isStartingLocation(to)) {
+			if (!isStartingLocation(new Coordinate(to))) {
 				throw new HantoException("Must place first piece at startingLocation.");
 			}
 		} else {
 			if (turn > 1) {
 				Coordinate hcTo = new Coordinate(to);
 				boolean nextToOpposingPiece = false;
-				for (HantoCoordinate adjacent : hcTo.getAdjacentCoordinates()) {
+				for (HantoCoordinate adjacent : hcTo.getNeighbors()) {
 					if (getPieceAt(adjacent) != null
-							&& getPieceAt(adjacent).getColor() != currentPlayer) {
+							&& getPieceAt(adjacent).getColor() != current) {
 						nextToOpposingPiece = true;
 					}
 				}
@@ -100,40 +113,41 @@ public class EpsilonHantoGame extends AbstractGame {
 		MoveResult result = MoveResult.OK;
 		if (redButterfly != null && isSurrounded(redButterfly)) {
 			result = MoveResult.BLUE_WINS;
-			gameInProgress = false;
+			inProgress = false;
 		} else if (blueButterfly != null && isSurrounded(blueButterfly)) {
 			result = MoveResult.RED_WINS;
-			gameInProgress = false;
+			inProgress = false;
 		}
 		if ((redButterfly != null && isSurrounded(redButterfly))
 				&& (blueButterfly != null && isSurrounded(blueButterfly))) {
 			result = MoveResult.DRAW;
-			gameInProgress = false;
+			inProgress = false;
 		}
 		return result;
 	}
 
 	@Override
-	protected MoveResult handleResignation() throws HantoException {
-		if (!getAvailableMoves(currentPlayer).isEmpty()) {
+	protected MoveResult handleResignation() throws HantoPrematureResignationException {
+		if (!getAvailableMoves(current).isEmpty()) {
 			throw new HantoPrematureResignationException();
 		}
 		MoveResult result = MoveResult.OK;
-		switch (currentPlayer) {
+		switch (current) {
 		case RED:
 			result = MoveResult.BLUE_WINS;
 			break;
 		case BLUE:
 			result = MoveResult.RED_WINS;
 		}
-		gameInProgress = false;
+		inProgress = false;
 		return result;
 	}
 
+
 	/**
-	 * 
-	 * @param currentPlayer
-	 * @return
+	 * Method getAvailableMoves.
+	 * @param me HantoPlayerColor
+	 * @return List<HantoMoveRecord>
 	 */
 	public List<HantoMoveRecord> getAvailableMoves(HantoPlayerColor me) {
 		HantoPlayerColor enemy;
@@ -152,7 +166,7 @@ public class EpsilonHantoGame extends AbstractGame {
 			if (!pieceList.isEmpty(me)) {
 				if (turn <= 1) {
 					for (HantoCoordinate adjacent : new Coordinate(
-							startingLocation).getAdjacentCoordinates()) {
+							startingLocation).getNeighbors()) {
 						moves.add(new HantoMoveRecord(HantoPieceType.BUTTERFLY,
 								null, adjacent));
 						moves.add(new HantoMoveRecord(HantoPieceType.SPARROW,
@@ -166,11 +180,11 @@ public class EpsilonHantoGame extends AbstractGame {
 					for (Entry<Coordinate, Piece> entry : board.entrySet()) {
 						Coordinate hc = new Coordinate(entry.getKey());
 						if (getPieceAt(hc).getColor().equals(me)) {
-							for (HantoCoordinate adjacent : new Coordinate(hc).getAdjacentCoordinates()) {
+							for (HantoCoordinate adjacent : new Coordinate(hc).getNeighbors()) {
 								boolean nextToEnemy = false;
 								if (getPieceAt(adjacent) == null) {
 									for (HantoCoordinate adjacentToAdjacent : new Coordinate(
-											adjacent).getAdjacentCoordinates()) {
+											adjacent).getNeighbors()) {
 										if (getPieceAt(adjacentToAdjacent) != null
 												&& getPieceAt(
 														adjacentToAdjacent)
@@ -221,19 +235,22 @@ public class EpsilonHantoGame extends AbstractGame {
 				}
 				if (!((turn >= 6) && (!board.containsValue(pieceFactory
 						.makeHantoPiece(HantoPieceType.BUTTERFLY, me))))) {
+					
+					boolean flag = true;
 					for (Entry<Coordinate, Piece> entry : board.entrySet()) {
 						Coordinate hc = new Coordinate(
 								entry.getKey());
 						if (getPieceAt(hc) != null
 								&& getPieceAt(hc).getColor().equals(me)) {
-							// If it is YOUR PIECE
+							
 							HantoPieceType pieceType = getPieceAt(hc).getType();
-							// IF MOVING IT WOULD MAKE THE BOARD DISCONTINUOUS
+							
+							
 							Map<Coordinate, Piece> temp = new HashMap<Coordinate, Piece>(board);
 							temp.remove(new Coordinate(hc));
 							Coordinate adjCoord = null;
 							for (HantoCoordinate adj : hc
-									.getAdjacentCoordinates()) {
+									.getNeighbors()) {
 								if (getPieceAt(adj) != null) {
 									adjCoord = new Coordinate(adj);
 									break;
@@ -241,7 +258,7 @@ public class EpsilonHantoGame extends AbstractGame {
 							}
 							boolean movingBreaksContinuity = true;
 							if (adjCoord != null) {
-								movingBreaksContinuity = !boardIsContinuous(
+								movingBreaksContinuity = !isBoardContinuous(
 										temp, adjCoord);
 							}
 							if (movingBreaksContinuity) {
@@ -249,18 +266,18 @@ public class EpsilonHantoGame extends AbstractGame {
 							}
 							switch (pieceType) {
 							case BUTTERFLY:
-								// same rules as butterfly, no break
 							case CRAB:
 								for (HantoCoordinate adjacent : hc
-										.getAdjacentCoordinates()) {
+										.getNeighbors()) {
 									if (getPieceAt(adjacent) == null) {
 										try {
-											validateWalkOneHex(pieceType, hc,
+											validWalk(pieceType, hc,
 													adjacent);
 											moves.add(new HantoMoveRecord(
 													getPieceAt(hc).getType(),
 													hc, adjacent));
 										} catch (HantoException e) {
+											System.out.print("caught an error");
 										}
 									}
 								}
@@ -268,13 +285,12 @@ public class EpsilonHantoGame extends AbstractGame {
 							case SPARROW:
 								break;
 							case HORSE:
-								// for each axis
 								for (int axis = 0; axis < 6; axis++) {
 									int i;
 									switch (axis) {
 									case 0:
 										i = 1;
-										while (true) {
+										while (flag) {
 											try {
 												validJump(
 														hc,
@@ -303,7 +319,7 @@ public class EpsilonHantoGame extends AbstractGame {
 										break;
 									case 1:
 										i = 1;
-										while (true) {
+										while (flag) {
 											try {
 												validJump(
 														hc,
@@ -332,7 +348,7 @@ public class EpsilonHantoGame extends AbstractGame {
 										break;
 									case 2:
 										i = 1;
-										while (true) {
+										while (flag) {
 											try {
 												validJump(
 														hc,
@@ -359,7 +375,7 @@ public class EpsilonHantoGame extends AbstractGame {
 										break;
 									case 3:
 										i = 1;
-										while (true) {
+										while (flag) {
 											try {
 												validJump(
 														hc,
@@ -386,7 +402,7 @@ public class EpsilonHantoGame extends AbstractGame {
 										break;
 									case 4:
 										i = 1;
-										while (true) {
+										while (flag) {
 											try {
 												validJump(
 														hc,
@@ -413,7 +429,7 @@ public class EpsilonHantoGame extends AbstractGame {
 										break;
 									case 5:
 										i = 1;
-										while (true) {
+										while (flag) {
 											try {
 												validJump(
 														hc,
@@ -451,17 +467,12 @@ public class EpsilonHantoGame extends AbstractGame {
 		return moves;
 	}
 
+
 	/**
-	 * Determines if moving (not placing) the piece is valid.
-	 * 
-	 * @param pieceType
-	 *            The piece type that is being moved
-	 * @param from
-	 *            Where the piece is moving from
-	 * @param to
-	 *            Where the piece is moving to
-	 * 
-	 * @throws InvalidSourceLocationException
+	 * Method validPieceMovement.
+	 * @param pieceType HantoPieceType
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
 	 * @throws HantoException
 	 */
 	void validPieceMovement(HantoPieceType pieceType, HantoCoordinate from,
@@ -476,7 +487,7 @@ public class EpsilonHantoGame extends AbstractGame {
 		switch (pieceType) {
 		case BUTTERFLY:
 		case CRAB:
-			validateWalkOneHex(pieceType, from, to);
+			validWalk(pieceType, from, to);
 			break;
 		case SPARROW:
 			validFlight(pieceType, from, to);
@@ -487,5 +498,6 @@ public class EpsilonHantoGame extends AbstractGame {
 			break;
 		}
 	}
+
 
 }

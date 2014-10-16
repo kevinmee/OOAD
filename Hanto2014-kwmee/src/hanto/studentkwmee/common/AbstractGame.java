@@ -1,3 +1,8 @@
+/*
+ * Abstract Game // $codepro.audit.disable codeInComments
+ * 
+ * Kevin Mee, WPI A-term
+ */
 package hanto.studentkwmee.common;
 
 import java.util.HashMap;
@@ -15,98 +20,88 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.HantoPrematureResignationException;
 import hanto.common.MoveResult;
-import hanto.studentkwmee.common.PlayerPieceList;
 
+
+/**
+ */
 public abstract class AbstractGame implements HantoGame {
 
-	// Every hanto game will have a HashMap to represent the Board
+
 	protected Map<Coordinate, Piece> board;
-	protected Coordinate startingLocation;
 	protected int turn;
-	protected HantoPlayerColor movesFirst;
-	protected HantoPlayerColor currentPlayer;
+	protected HantoPlayerColor movesFirst, current;
 	protected HantoPieceFactory pieceFactory = HantoPieceFactory.getInstance();
 	protected PlayerPieceList pieceList;
-	protected Coordinate blueButterfly;
-	protected Coordinate redButterfly;
-	protected int maxTurns;
-	protected boolean gameInProgress;
-	protected int flightDistance;
+	protected Coordinate blueButterfly, redButterfly, startingLocation;
+	protected int maxTurns, flightDistance;
+	protected boolean inProgress;
+
 
 	/**
-	 * @param color
-	 *            The color of the player who moves first
+	 * Constructor for AbstractGame.
+	 * @param color HantoPlayerColor
 	 */
 	protected AbstractGame(HantoPlayerColor color) {
 		board = new HashMap<Coordinate, Piece>();
 		turn = 0;
 		movesFirst = color;
-		gameInProgress = true;
+		inProgress = true;
 	}
 
-	/*
-	 * (non-Javadoc) <!-- // $codepro.audit.disable codeInComments -->
-	 * 
-	 * @see hanto.common.HantoGame#getPieceAt(hanto.common.HantoCoordinate)
-	 */
+
 	public HantoPiece getPieceAt(HantoCoordinate where) {
 		return board.get(new Coordinate(where));
 	}
 
-	/*
-	 * (non-Javadoc) // $codepro.audit.disable codeInComments
-	 * 
-	 * @see hanto.common.HantoGame#getPrintableBoard()
-	 */
+
 	public String getPrintableBoard() {
 		StringBuilder output = new StringBuilder();
 		for (Map.Entry<Coordinate, Piece> entry : board.entrySet()) {
 			output.append(entry.getKey().toString());
 			output.append("\t:\t");
 			output.append(entry.getValue().toString());
-			output.append('\n');
 		}
 		return output.toString();
 	}
 
-	/**
-	 * @param c
-	 *            The coordinate to check if at the 'home' position
-	 * @return returns true if the tested coordinate is 'home' : (0,0)
-	 */
-	public boolean isStartingLocation(HantoCoordinate c) {
-		return startingLocation.equals(c);
-	}
 
 	/**
-	 * Determines if there is a piece that is adjacent to the given coordinate
-	 * 
-	 * @param hc
-	 *            The coordinate to check adjacency
-	 * @return true if there are pieces touching the given coordinate.
+	 * Method isStartingLocation.
+	 * @param coord Coordinate
+	 * @return boolean
 	 */
-	public boolean hasAdjacentPiece(final HantoCoordinate hc) {
-		boolean foundAdjacentPiece = false;
-		for (HantoCoordinate entry : new Coordinate(hc)
-				.getAdjacentCoordinates()) {
+	public boolean isStartingLocation(Coordinate coord) {
+		return startingLocation.equals(coord);
+	}
+
+
+	/**
+	 * Method adjacentPiece.
+	 * @param coord Coordinate
+	 * @return boolean
+	 */
+	public boolean adjacentPiece(final Coordinate coord) {
+		boolean flag = false;
+		for (HantoCoordinate entry : new Coordinate(coord)
+		.getNeighbors()) {
 			if (getPieceAt(entry) != null) {
-				foundAdjacentPiece = true;
+				flag = true;
 				break;
 			}
 		}
-		return foundAdjacentPiece;
+		return flag;
 	}
 
 	@Override
 	public MoveResult makeMove(final HantoPieceType pieceType,
-			final HantoCoordinate from, final HantoCoordinate to)
-			throws HantoException {
-		determineColor();
+	final HantoCoordinate from, final HantoCoordinate to)
+	throws HantoException {
+		whoseTurn();
 		MoveResult result = MoveResult.OK;
-		if (to == null && from == null) {
-				result = handleResignation();
+		if (isResigning(from, to)) {
+			result = handleResignation();
 		} else {
-			validateMove(pieceType, from, to);
+			checkMoveStatus(pieceType, from, to);
 			placePiece(pieceType, from, to);
 			result = determineMoveResult();
 			turn++;
@@ -114,19 +109,38 @@ public abstract class AbstractGame implements HantoGame {
 		return result;
 	}
 
+	/**
+	 * Method isResigning.
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
+	 * @return boolean
+	 */
+	protected boolean isResigning(HantoCoordinate from, HantoCoordinate to){
+		boolean result = false;
+		if( from == null && to == null){
+			result = true;
+		}
+		return result;
+	}
+	
+	/**
+	 * Method handleResignation.
+	 * @return MoveResult
+	 * @throws HantoException
+	 * @throws HantoPrematureResignationException
+	 */
 	protected abstract MoveResult handleResignation() throws HantoException, HantoPrematureResignationException;
 
+
 	/**
-	 * Determines if the coordinate is surrounded by pieces
-	 * 
-	 * @param hc
-	 *            the coordinate to test if there are adjacent pieces
-	 * @return True if location is surrounded
+	 * Method isSurrounded.
+	 * @param coord HantoCoordinate
+	 * @return boolean
 	 */
-	protected boolean isSurrounded(final HantoCoordinate hc) {
+	protected boolean isSurrounded(final HantoCoordinate coord) {
 		boolean isSurrounded = true;
-		for (HantoCoordinate entry : new Coordinate(hc)
-				.getAdjacentCoordinates()) {
+		for (HantoCoordinate entry : new Coordinate(coord)
+		.getNeighbors()) {
 			if (getPieceAt(entry) == null) {
 				isSurrounded = false;
 				break;
@@ -135,38 +149,30 @@ public abstract class AbstractGame implements HantoGame {
 		return isSurrounded;
 	}
 
-	/**
-	 * Determines if the given move is valid
-	 * 
-	 * @param pieceType
-	 *            The Type of Piece to be operated on the board
-	 * @param from
-	 *            The source destination when moving a piece, null if placing a
-	 *            piece
-	 * @param to
-	 *            The target location to the piece is moving to
-	 * @throws HantoException
-	 *             Throws exceptions if an invalid move
-	 */
-	protected abstract void validateMove(final HantoPieceType pieceType,
-			final HantoCoordinate from, final HantoCoordinate to)
-			throws HantoException;
 
 	/**
-	 * Places the piece on the board
-	 * 
-	 * @param pieceType
-	 *            Piecetype to put on the board
-	 * @param from
-	 *            The location the piece is moving from. Null if a placement
-	 * @param to
-	 *            The location to place the piece on the board
+	 * Method checkMoveStatus.
+	 * @param pieceType HantoPieceType
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
+	 * @throws HantoException
+	 */
+	protected abstract void checkMoveStatus(final HantoPieceType pieceType,
+	final HantoCoordinate from, final HantoCoordinate to)
+	throws HantoException;
+
+
+	/**
+	 * Method placePiece.
+	 * @param pieceType HantoPieceType
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
 	 */
 	protected void placePiece(final HantoPieceType pieceType,
-			final HantoCoordinate from, final HantoCoordinate to) {
-		Piece piece = pieceFactory.makeHantoPiece(pieceType, currentPlayer);
+	final HantoCoordinate from, final HantoCoordinate to) {
+		Piece piece = pieceFactory.makeHantoPiece(pieceType, current);
 		if (pieceType == HantoPieceType.BUTTERFLY) {
-			switch (currentPlayer) {
+			switch (current) {
 			case BLUE:
 				blueButterfly = new Coordinate(to);
 				break;
@@ -176,69 +182,72 @@ public abstract class AbstractGame implements HantoGame {
 			}
 		}
 		board.put(new Coordinate(to), piece);
+		
 		if (from != null) {
 			board.remove(new Coordinate(from));
 		}
-		pieceList.usePiece(currentPlayer, pieceType);
+		pieceList.usePiece(current, pieceType);
 	}
 
+
 	/**
-	 * @return The result state of the move
+	 * Method determineMoveResult.
+	 * @return MoveResult
 	 */
 	protected abstract MoveResult determineMoveResult();
 
+
 	/**
-	 * Determines the current player's color.
-	 * 
+	 * Method whoseTurn.
 	 */
-	protected void determineColor() {
+	protected void whoseTurn() {
 		if (turn % 2 == 0) {
 			switch (movesFirst) {
 			case BLUE:
-				currentPlayer = HantoPlayerColor.BLUE;
+				current = HantoPlayerColor.BLUE;
 				break;
 			case RED:
-				currentPlayer = HantoPlayerColor.RED;
+				current = HantoPlayerColor.RED;
 				break;
 			}
 		} else {
 			switch (movesFirst) {
 			case BLUE:
-				currentPlayer = HantoPlayerColor.RED;
+				current = HantoPlayerColor.RED;
 				break;
 			case RED:
-				currentPlayer = HantoPlayerColor.BLUE;
+				current = HantoPlayerColor.BLUE;
 				break;
 			}
 		}
 	}
 
+
 	/**
-	 * Determines if the given board is continuous
-	 * 
-	 * @param temp
-	 *            A Map representing the board.
-	 * @param first
-	 *            A location to start its iteration. Usually give the piece
-	 *            that's being moved.
-	 * @return boolean if all of the pieces are in a single 'blob'
+	 * Method isBoardContinuous.
+	 * @param temp Map<Coordinate,Piece>
+	 * @param first Coordinate
+	 * @return boolean
 	 */
-	protected boolean boardIsContinuous(Map<Coordinate, Piece> temp,
-			Coordinate first) {
+	protected boolean isBoardContinuous(Map<Coordinate, Piece> temp,
+	Coordinate first) {
 
 		Set<Coordinate> visited = new HashSet<Coordinate>();
-		List<Coordinate> fringe = new LinkedList<Coordinate>();
-		fringe.add(new Coordinate(first));
-		while (!fringe.isEmpty()) {
-			Coordinate current = fringe.remove(0);
+		List<Coordinate> outterEdge = new LinkedList<Coordinate>();
+		outterEdge.add(new Coordinate(first));
+		
+		
+		while (!outterEdge.isEmpty()) {
+			Coordinate current = outterEdge.remove(0);
 			if (visited.contains(current)) {
 				continue;
 			}
 			visited.add(current);
-			for (HantoCoordinate adjacent : current.getAdjacentCoordinates()) {
+			
+			for (HantoCoordinate adjacent : current.getNeighbors()) {
 				if (temp.get(adjacent) != null
-						&& !visited.contains(new Coordinate(adjacent))) {
-					fringe.add(new Coordinate(adjacent));
+				&& !visited.contains(new Coordinate(adjacent))) {
+					outterEdge.add(new Coordinate(adjacent));
 				}
 			}
 		}
@@ -246,173 +255,153 @@ public abstract class AbstractGame implements HantoGame {
 	}
 
 	/**
-	 * @param pieceType
-	 *            The Piece type that is walking
-	 * @param from
-	 *            Where the piece is walking from
-	 * @param to
-	 *            Where the piece is walking to
-	 * @throws InvalidTargetLocationException
-	 */
-	protected void validateWalkOneHex(HantoPieceType pieceType,
-			HantoCoordinate from, HantoCoordinate to) throws HantoException {
-		Coordinate hcFrom = new Coordinate(from);
-		if (!hcFrom.isAdjacentTo(to)) {
-			throw new HantoException("Piece can only move one hex.");
-		} else {
-			boolean canSlide = false;
-			for (HantoCoordinate c : hcFrom.getAdjacentCoordinates()) {
-				Coordinate next = new Coordinate(c);
-				if (next.isAdjacentTo(to) && getPieceAt(next) == null) {
-					canSlide = true;
-				}
-			}
-			Map<Coordinate, Piece> temp = new HashMap<Coordinate, Piece>(board);
-			temp.remove(new Coordinate(from));
-			temp.put(new Coordinate(to),
-					pieceFactory.makeHantoPiece(pieceType, currentPlayer));
-			canSlide = canSlide && boardIsContinuous(temp, new Coordinate(to));
-			if (!canSlide) {
-				throw new HantoException("Cannot move from to that location");
-			}
-		}
-	}
-
-	protected void validFlight(HantoPieceType pieceType, HantoCoordinate from,
-			HantoCoordinate to) throws HantoException {
-
-		if (to == null) {
-			throw new HantoException("Can't move piece to null");
-		} else {
-			if (from == null) {
-				throw new HantoException("Cant move piece from a null");
-			}
-		}
-		
-		Map<Coordinate, Piece> temp = new HashMap<Coordinate, Piece>(board);
-		temp.remove(new Coordinate(from));
-		temp.put(new Coordinate(to), HantoPieceFactory.getInstance()
-				.makeHantoPiece(pieceType, currentPlayer));
-		
-		if (boardIsContinuous(temp, new Coordinate(to))) {
-		} 
-		else {
-			throw new HantoException("Can't move that piece.");
-		}
-		if (new Coordinate(from).getDistanceTo(to) > flightDistance) {
-			throw new HantoException( "This piece cannot fly more than the max flight");
-		}
-	}
-	
-//	
-//	/**
-//	 * Determines if moving from 'from' position to 'to' position follows valid
-//	 * jumping behavior
-//	 * 
-//	 * @param from
-//	 *            - Where the piece is moving from
-//	 * @param to
-//	 *            - Where the piece is moving to
-//	 * @throws HantoException
-//	 */
-//	protected void validJump(final HantoPieceType pieceType, final HantoCoordinate from, final HantoCoordinate to)
-//			throws HantoException {
-//		if(from.getX() == to.getX() || from.getY() == to.getY()){
-//			board.put(new Coordinate(to), new Piece(pieceType, currentPlayer));
-//			board.remove(from);
-//		}
-//		else{
-//			if( Math.abs(to.getX() - from.getX()) == Math.abs(to.getY() - from.getY())){
-//				Map<Coordinate, Piece> tempBoard = new HashMap<Coordinate, Piece>();
-//				tempBoard.putAll(board);
-//				
-//				tempBoard.put(new Coordinate(to), new Piece(pieceType, currentPlayer));
-//				tempBoard.remove(from);
-//				
-//				if(!boardIsContinuous(tempBoard, new Coordinate(to))){
-//					throw new HantoException("Board is no longer continuous");
-//				}
-//				else{
-//					board.putAll(tempBoard);;
-//				}
-//			}
-//		}
-//	}
-	/**
-	 * Determines if moving from 'from' position to 'to' position follows valid
-	 * jumping behavior
-	 * 
-	 * @param from
-	 *            - Where the piece is moving from
-	 * @param to
-	 *            - Where the piece is moving to
+	 * Method validJump.
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
 	 * @throws HantoException
 	 */
 	protected void validJump(HantoCoordinate from, HantoCoordinate to)
-			throws HantoException {
+	throws HantoException {
+		
+		
 		if (getPieceAt(to) != null) {
 			throw new HantoException(
-					"Piece already exists there!");
+			"Can't jump onto another piece");
 		}
 		if (new Coordinate(from).isAdjacentTo(to)) {
-			throw new HantoException("Can't jump to adjacent tile.");
+			throw new HantoException("Can't jump next to your current spot");
 		}
-		boolean gap = false;
-		int largerX;
-		int smallerX;
+		
+		boolean isOpen = false;
+		int bigCoordX, smallCoordX, bigCoordY, smallCoordY;
+		
 		if (from.getX() < to.getX()) {
-			largerX = to.getX();
-			smallerX = from.getX();
+			bigCoordX = to.getX();
+			smallCoordX = from.getX();
 		} else {
-			largerX = from.getX();
-			smallerX = to.getX();
+			bigCoordX = from.getX();
+			smallCoordX = to.getX();
 		}
-		int largerY;
-		int smallerY;
+		
+
 		if (from.getY() < to.getY()) {
-			largerY = to.getY();
-			smallerY = from.getY();
+			bigCoordY = to.getY();
+			smallCoordY = from.getY();
 		} 
 		else {
-			largerY = from.getY();
-			smallerY = to.getY();
+			bigCoordY = from.getY();
+			smallCoordY = to.getY();
 		}
+		
+		
+		// Straight jump along X-axis
 		if (from.getX() == to.getX()) {
-			// 'vertical' straight line
-			for (int y = smallerY + 1; y < largerY; y++) {
-				Coordinate hcVisiting = new Coordinate(
-						from.getX(), y);
-				if (getPieceAt(hcVisiting) == null) {
-					gap = true;
+			for (int y = smallCoordY + 1; y < bigCoordY; y++) {
+				Coordinate visiting = new Coordinate(
+				from.getX(), y);
+				if (getPieceAt(visiting) == null) {
+					isOpen = true;
 				}
 			}
 		} 
+		// Straight jump along Y-axis
 		else if (from.getY() == to.getY()) {
-			// 'positive diagonal' straight line
-			for (int x = smallerX + 1; x < largerX; x++) {
-				Coordinate hcVisiting = new Coordinate(x,
-						from.getY());
-				if (getPieceAt(hcVisiting) == null) {
-					gap = true;
+			for (int x = smallCoordX + 1; x < bigCoordX; x++) {
+				Coordinate visiting = new Coordinate(x,
+				from.getY());
+				if (getPieceAt(visiting) == null) {
+					isOpen = true;
 				}
 			}
 		} 
 		else if (from.getX() - to.getX() == (0 - (from.getY() - to.getY()))) {
-			// 'negative diagonal' straight line
-			int y = largerY - 1;
-			for (int x = smallerX + 1; x < largerX; x++) {
-				Coordinate hcVisiting = new Coordinate(x, y);
-				if (getPieceAt(hcVisiting) == null && !(hcVisiting.equals(to))) {
-					gap = true;
+			int y = bigCoordY - 1;
+			for (int x = smallCoordX + 1; x < bigCoordX; x++) {
+				Coordinate visiting = new Coordinate(x, y);
+				if (getPieceAt(visiting) == null && !(visiting.equals(to))) {
+					isOpen = true;
 				}
 				y--;
 			}
 		} 
 		else {
-			throw new HantoException("Pieces may only jump in a straight line.");
+			throw new HantoException("Can only jump in a straight line");
 		}
-		if (gap == true) {
-			throw new HantoException("Pieces may not jump over empty spaces.");
+		if (isOpen) {
+			throw new HantoException("Can't jump over an open spot");
 		}
 	}
+	
+	
+	
+	/**
+	 * Method validWalk.
+	 * @param pieceType HantoPieceType
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
+	 * @throws HantoException
+	 */
+	protected void validWalk(HantoPieceType pieceType,
+	HantoCoordinate from, HantoCoordinate to) throws HantoException {
+		
+		if (!((Coordinate) from).isAdjacentTo(to)) {
+			throw new HantoException("Can only walk one space");
+		} 
+		else {
+			boolean flag = false;
+			
+			for (HantoCoordinate coord : ((Coordinate) from).getNeighbors()) {
+				Coordinate next = new Coordinate(coord);
+				
+				if (next.isAdjacentTo(to) && getPieceAt(next) == null) {
+					flag = true;
+				}
+			}
+			
+			
+			Map<Coordinate, Piece> temp = new HashMap<Coordinate, Piece>(board);
+			temp.remove(new Coordinate(from));
+			temp.put(new Coordinate(to),
+			pieceFactory.makeHantoPiece(pieceType, current));
+			
+			flag = isBoardContinuous(temp, new Coordinate(to));
+			if (!flag) {
+				throw new HantoException("Can't move from there");
+			}
+		}
+	}
+
+	/**
+	 * Method validFlight.
+	 * @param pieceType HantoPieceType
+	 * @param from HantoCoordinate
+	 * @param to HantoCoordinate
+	 * @throws HantoException
+	 */
+	protected void validFlight(HantoPieceType pieceType, HantoCoordinate from,
+	HantoCoordinate to) throws HantoException {
+		
+		if (to == null || from == null) {
+			throw new HantoException("One of the spots is null");
+		} 
+		
+		Map<Coordinate, Piece> temp = new HashMap<Coordinate, Piece>(board);
+		temp.remove(new Coordinate(from));
+		temp.put(new Coordinate(to), HantoPieceFactory.getInstance()
+		.makeHantoPiece(pieceType, current));
+		
+		if (isBoardContinuous(temp, new Coordinate(to))) {
+			inProgress = true;
+		} 
+		else {
+			throw new HantoException("That would break continuity");
+		}
+		if (new Coordinate(from).getDistanceTo(to) > flightDistance) {
+			throw new HantoException( "Can't fly that far");
+		}
+	}
+	
+
+
+
 }

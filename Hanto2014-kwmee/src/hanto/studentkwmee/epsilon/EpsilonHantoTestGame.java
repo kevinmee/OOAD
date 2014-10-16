@@ -1,12 +1,21 @@
+/*
+ * Epsilon Hanto Test game
+ * 
+ * Kevin Mee, WPI A-term
+ */
+
 package hanto.studentkwmee.epsilon;
 
 import hanto.common.HantoPlayerColor;
 import hanto.studentkwmee.common.Coordinate;
 import hanto.studentkwmee.common.HantoPieceFactory;
 import hanto.studentkwmee.common.Piece;
-import hanto.studentkwmee.epsilon.EpsilonHantoGame;
+
 import hanto.common.HantoTestGame;
 
+/**
+ * 
+ */
 public class EpsilonHantoTestGame extends EpsilonHantoGame implements
 		HantoTestGame {
 	
